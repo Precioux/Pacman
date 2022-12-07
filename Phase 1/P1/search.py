@@ -121,7 +121,6 @@ def breadthFirstSearch(problem):
 
     # Getting starting node
     startLocation = problem.getStartState()
-    print(f'Statrting point is {startLocation}')
 
     #Setting Root Node
     rootNode = (startLocation, [])
@@ -140,7 +139,6 @@ def breadthFirstSearch(problem):
 
         #Setting latest node as current one
         node = forBFS.pop()
-        #print(f'Current node is {node}')
 
         #checking whether current node is goal
         if problem.isGoalState(node[0]):
@@ -148,15 +146,13 @@ def breadthFirstSearch(problem):
 
         #getting current node successors
         successors = problem.getSuccessors(node[0])
-        #print(f'Successors to current node are {successors}')
+
         #adding successors to queue if they are not visited
         for item in successors:
             if item[0] in visitedLocations:
                 continue
             visitedLocations.add(item[0])
-            #print(f'visited locations are {visitedLocations}')
             forBFS.push((item[0], node[1] + [item[1]]))
-            #print(f'added to Q => node[0]={item[0]} , node[1]={node[1]} + {item[1]}')
 
     return None
 
