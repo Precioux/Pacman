@@ -73,21 +73,47 @@ def tinyMazeSearch(problem):
     return  [s, s, w, s, w, w, s, w]
 
 def depthFirstSearch(problem):
-    """
-    Search the deepest nodes in the search tree first.
 
-    Your search algorithm needs to return a list of actions that reaches the
-    goal. Make sure to implement a graph search algorithm.
+    #Defining a stack for DFS traverse
+    forDFS = util.Stack()
 
-    To get started, you might want to try some of these simple commands to
-    understand the search problem that is being passed in:
+    #Getting starting point
+    startLocation = problem.getStartState()
 
-    print("Start:", problem.getStartState())
-    print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
-    print("Start's successors:", problem.getSuccessors(problem.getStartState()))
-    """
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    # Defining Root Node => (location, path)
+    rootNode = (startLocation, [])
+
+    #Pushing root to stack
+    forDFS.push(rootNode)
+
+    #Defining a set for visited nodes
+    visitedLocations = set()
+
+    while not forDFS.isEmpty():
+        # node[0] : location, node[1] : path(NEWS)
+
+        #pop latest node as current node
+        node = forDFS.pop()
+
+        #adding current node to visited ones
+        visitedLocations.add(node[0])
+
+        #check whether current node is goal or not
+        if problem.isGoalState(node[0]):
+            return node[1]
+
+        #find successors of current node
+        successors = problem.getSuccessors(node[0])
+
+        for item in successors:
+            #checking whether successor has been visited or not
+            if item[0] in visitedLocations:
+                continue
+            #pushining unvisited ones as nodes to stack
+            forDFS.push((item[0], node[1] + [item[1]]))
+
+    return None
+
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
