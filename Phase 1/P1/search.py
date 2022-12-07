@@ -116,9 +116,49 @@ def depthFirstSearch(problem):
 
 
 def breadthFirstSearch(problem):
-    """Search the shallowest nodes in the search tree first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    #Defining a Queue for applying BFS
+    forBFS = util.Queue()
+
+    # Getting starting node
+    startLocation = problem.getStartState()
+    print(f'Statrting point is {startLocation}')
+
+    #Setting Root Node
+    rootNode = (startLocation, [])
+
+    #adding root node to queue
+    forBFS.push(rootNode)
+
+    #Defining a set for visited nodes
+    visitedLocations = set()
+
+    #adding starting point to that set
+    visitedLocations.add(startLocation)
+
+    while not forBFS.isEmpty():
+        # node[0] : location, node[1] : path (NEWS)
+
+        #Setting latest node as current one
+        node = forBFS.pop()
+        #print(f'Current node is {node}')
+
+        #checking whether current node is goal
+        if problem.isGoalState(node[0]):
+            return node[1]
+
+        #getting current node successors
+        successors = problem.getSuccessors(node[0])
+        #print(f'Successors to current node are {successors}')
+        #adding successors to queue if they are not visited
+        for item in successors:
+            if item[0] in visitedLocations:
+                continue
+            visitedLocations.add(item[0])
+            #print(f'visited locations are {visitedLocations}')
+            forBFS.push((item[0], node[1] + [item[1]]))
+            #print(f'added to Q => node[0]={item[0]} , node[1]={node[1]} + {item[1]}')
+
+    return None
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
