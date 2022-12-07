@@ -136,7 +136,6 @@ def breadthFirstSearch(problem):
 
     while not forBFS.isEmpty():
         # node[0] : location, node[1] : path (NEWS)
-
         #Setting latest node as current one
         node = forBFS.pop()
 
@@ -157,9 +156,38 @@ def breadthFirstSearch(problem):
     return None
 
 def uniformCostSearch(problem):
-    """Search the node of least total cost first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    #Defining a priority queue
+    forUCS = util.PriorityQueue()
+
+    #Getting starting point
+    startLocation = problem.getStartState()
+
+    # (location, path, cost)
+    rootNode = (startLocation, [], 0)
+
+    #adding root to priority queue and visited locations
+    forUCS.push(rootNode, 0)
+    visitedLocations = set()
+
+    while not forUCS.isEmpty():
+        # node[0] : location, node[1] : path, node[2] : cost
+
+        #setting latest node as current one
+        node = forUCS.pop()
+
+        #checking whether if current node is goal or not
+        if problem.isGoalState(node[0]):
+            return node[1]
+
+        #adding current node to visited ones and checking for its successors
+        if node[0] not in visitedLocations:
+            visitedLocations.add(node[0])
+            for successor in problem.getSuccessors(node[0]):
+                if successor[0] not in visitedLocations:
+                    cost = node[2] + successor[2]
+                    forUCS.push((successor[0], node[1] + [successor[1]], cost), cost)
+
+    return None
 
 def nullHeuristic(state, problem=None):
     """
