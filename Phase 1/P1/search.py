@@ -171,7 +171,6 @@ def uniformCostSearch(problem):
 
     while not forUCS.isEmpty():
         # node[0] : location, node[1] : path, node[2] : cost
-
         #setting latest node as current one
         node = forUCS.pop()
 
@@ -197,9 +196,37 @@ def nullHeuristic(state, problem=None):
     return 0
 
 def aStarSearch(problem, heuristic=nullHeuristic):
-    """Search the node that has the lowest combined cost and heuristic first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    #defining a priority queue
+    forAstar = util.PriorityQueue()
+
+    #Getting start location
+    startLocation = problem.getStartState()
+
+    #Setting root node
+    rootNode = (startLocation, [], 0)
+    forAstar.push(rootNode, 0)
+    visitedLocations = set()
+
+    while not forAstar.isEmpty():
+        # node[0] : location,node[1] : path,node[2] : cumulative cost
+        #current node
+        node = forAstar.pop()
+
+        #checking whether current node is goal or not
+        if problem.isGoalState(node[0]):
+            return node[1]
+
+        #adding to visited nodes
+        if node[0] not in visitedLocations:
+            visitedLocations.add(node[0])
+            for successor in problem.getSuccessors(node[0]):
+                if successor[0] not in visitedLocations:
+                    cost = node[2] + successor[2]
+                    #f function
+                    totalCost = cost + heuristic(successor[0], problem)
+                    forAstar.push((successor[0], node[1] + [successor[1]], cost), totalCost)
+
+    return None
 
 
 # Abbreviations
