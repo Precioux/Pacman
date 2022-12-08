@@ -80,8 +80,10 @@ def depthFirstSearch(problem):
     #Getting starting point
     startLocation = problem.getStartState()
 
+
     # Defining Root Node => (location, path)
     rootNode = (startLocation, [])
+
 
     #Pushing root to stack
     forDFS.push(rootNode)
