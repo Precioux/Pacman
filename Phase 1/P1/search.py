@@ -72,18 +72,68 @@ def tinyMazeSearch(problem):
     w = Directions.WEST
     return  [s, s, w, s, w, w, s, w]
 
-def depthFirstSearch(problem):
+def iterativeDeepeningSearch(problem):
+    height = 0
+    # Defining a stack for DFS traverse
+    forIDS = util.Stack()
+    checkLater = util.Queue()
+    # Getting starting point
+    startLocation = problem.getStartState()
 
+    # Defining Root Node => (location, path)
+    rootNode = (startLocation, [], 0)
+
+    # Pushing root to stack
+    forIDS.push(rootNode)
+
+    # Defining a set for visited nodes
+    visitedLocations = set()
+
+    while [(not forIDS.isEmpty()) or (not checkLater.isEmpty())] and height<101:
+        if forIDS.isEmpty():
+           while not checkLater.isEmpty():
+               n = checkLater.pop()
+               forIDS.push(n)
+           height = height + 1
+
+        # node[0] : location, node[1] : path(NEWS), node[2] : height
+        # pop latest node as current node
+        node = forIDS.pop()
+
+        if node[2] > height :
+            checkLater.push(node)
+
+
+        if node[2] ==  height:
+            # adding current node to visited ones
+            visitedLocations.add(node[0])
+
+            # check whether current node is goal or not
+            if problem.isGoalState(node[0]):
+                return node[1]
+
+            # find successors of current node
+            successors = problem.getSuccessors(node[0])
+            for item in successors:
+                # checking whether successor has been visited or not
+                if item[0] in visitedLocations:
+                    continue
+                # pushining unvisited ones as nodes to stack
+                forIDS.push((item[0], node[1] + [item[1]],node[2] + 1))
+
+    return None
+
+
+
+def depthFirstSearch(problem):
     #Defining a stack for DFS traverse
     forDFS = util.Stack()
 
     #Getting starting point
     startLocation = problem.getStartState()
 
-
     # Defining Root Node => (location, path)
     rootNode = (startLocation, [])
-
 
     #Pushing root to stack
     forDFS.push(rootNode)
@@ -236,3 +286,4 @@ bfs = breadthFirstSearch
 dfs = depthFirstSearch
 astar = aStarSearch
 ucs = uniformCostSearch
+ids = iterativeDeepeningSearch

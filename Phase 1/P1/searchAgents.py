@@ -70,6 +70,7 @@ class SearchAgent(Agent):
       breadthFirstSearch or bfs
 
 
+
     Note: You should NOT change any code in SearchAgent
     """
 
@@ -460,15 +461,12 @@ class ClosestDotSearchAgent(SearchAgent):
         Returns a path (a list of actions) to the closest dot, starting from
         gameState.
         """
-        # Here are some useful elements of the startState
+        #Getting Current State,food,walls
         startPosition = gameState.getPacmanPosition()
         food = gameState.getFood()
         walls = gameState.getWalls()
         problem = AnyFoodSearchProblem(gameState)
-
-        "*** YOUR CODE HERE ***"
-        # ucs, astar works fine, but bfs is the best and more straightforward
-        return search.bfs(problem)
+        return search.iterativeDeepeningSearch(problem)
 
 class AnyFoodSearchProblem(PositionSearchProblem):
     """
@@ -501,10 +499,10 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         The state is Pacman's position. Fill this in with a goal test that will
         complete the problem definition.
         """
-        x,y = state
-
-        foodList = self.food.asList()
-        return state in foodList
+        x, y = state
+        if self.food[x][y] == True:
+            return True
+        return False
 
 def mazeDistance(point1, point2, gameState):
     """
