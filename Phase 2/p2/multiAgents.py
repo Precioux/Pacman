@@ -73,8 +73,33 @@ class ReflexAgent(Agent):
         newGhostStates = successorGameState.getGhostStates()
         newScaredTimes = [ghostState.scaredTimer for ghostState in newGhostStates]
 
-        "*** YOUR CODE HERE ***"
-        return successorGameState.getScore()
+        # Does the action keep safe distance with ghosts
+        minGhostDistance = min([manhattanDistance(newPos, state.getPosition()) for state in newGhostStates])
+
+        # Does the action increase the score?
+        scoreDiff = successorGameState.getScore() - currentGameState.getScore()
+
+        # Does the action make the nearest food nearer?
+        pos = currentGameState.getPacmanPosition()
+        nearestFoodDistance = min([manhattanDistance(pos, food) for food in currentGameState.getFood().asList()])
+        newFoodsDistances = [manhattanDistance(newPos, food) for food in newFood.asList()]
+        newNearestFoodDistance = 0 if not newFoodsDistances else min(newFoodsDistances)
+        isFoodNearer = nearestFoodDistance - newNearestFoodDistance
+
+        # Keep direction to avoid meaningless random movements when upon criteria are not satisfied
+        direction = currentGameState.getPacmanState().getDirection()
+
+        # Reflection
+        if minGhostDistance <= 1 or action == Directions.STOP:
+            return 0
+        if scoreDiff > 0:
+            return 8
+        elif isFoodNearer > 0:
+            return 4
+        elif action == direction:
+            return 2
+        else:
+            return 1
 
 def scoreEvaluationFunction(currentGameState):
     """
